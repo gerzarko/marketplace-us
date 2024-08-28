@@ -256,6 +256,8 @@ export const French = {
     no: "Non",
     more: "plus",
     secular: "Laïque",
+    downHosted: "Hébergé",
+    downloadable: "Téléchargeable",
     resourceLinks: "Liens vers les ressources",
     draft: "Brouillon",
   },
@@ -599,6 +601,7 @@ export const French = {
       { text: "Voir les Résultats", ariaLabel: "Voir les Résultats" },
       { text: "Propre Laïque", ariaLabel: "Propre Laïque" },
       { text: "Propre Type de Ressource", ariaLabel: "Propre Type de Ressource" },
+      { text: "Propre Type de Hébergé", ariaLabel: "Propre Type de Hébergé" },
     ],
   },
 

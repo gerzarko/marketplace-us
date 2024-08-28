@@ -50,6 +50,7 @@ export const ResourcesView: Component = () => {
     const [searchString, setSearchString] = createSignal<string>("");
     const [noPostsVisible, setNoPostsVisible] = createSignal<boolean>(false);
     const [secularFilters, setSecularFilters] = createSignal<boolean>(false);
+    const [downHostedFilter, setDownHostedFilter] = createSignal<number>(0);
 
     const screenSize = useStore(windowSize);
 
@@ -130,7 +131,9 @@ export const ResourcesView: Component = () => {
             gradeFilters(),
             searchString(),
             resourceTypesFilters(),
-            secularFilters()
+            secularFilters(),
+            downHostedFilter(),
+
         );
 
         if (res === null || res === undefined) {
@@ -338,6 +341,11 @@ export const ResourcesView: Component = () => {
         filterPosts();
     };
 
+    const filterPostsByDownHosted = (downHosted: number) => {
+      setDownHostedFilter(downHosted);
+      filterPosts();
+    };
+
     const clearAllFilters = () => {
         let searchInput = document.getElementById("search") as HTMLInputElement;
         const subjectCheckboxes = document.querySelectorAll(
@@ -349,6 +357,7 @@ export const ResourcesView: Component = () => {
         const resourceTypesCheckoxes = document.querySelectorAll(
             "input[type='checkbox'].resourceType"
         ) as NodeListOf<HTMLInputElement>;
+
 
         console.log(subjectCheckboxes);
         console.log(gradeCheckboxes);
@@ -388,6 +397,7 @@ export const ResourcesView: Component = () => {
         setGradeFilters([]);
         setResourceTypeFilters([]);
         setSecularFilters(false);
+        setDownHostedFilter(0);
 
         filterPosts();
     };
@@ -459,6 +469,25 @@ export const ResourcesView: Component = () => {
         filterPosts();
     };
 
+    const clearDownHosted = () => {
+
+      const isCheckHosted = document.getElementsByClassName("checkBoxHosted") as HTMLCollectionOf<HTMLInputElement>;
+      const isCheckDown = document.getElementsByClassName("checkBoxDown") as HTMLCollectionOf<HTMLInputElement>;
+
+      if ( isCheckHosted[0].checked) {
+      console.log("check box clear")
+        isCheckHosted[0].checked = false;
+      }
+
+      if (isCheckDown[0].checked) {
+      console.log("check box clear")
+        isCheckDown[0].checked = false;
+      }
+
+      setDownHostedFilter(0);
+      filterPosts();
+    };
+
     return (
         <div class="">
             <div>
@@ -477,6 +506,9 @@ export const ResourcesView: Component = () => {
                     clearSecular={clearSecular}
                     filterPostsByResourceTypes={filterPostsByResourceTypes}
                     clearResourceTypes={clearResourceTypes}
+                    downHostedFilter={filterPostsByDownHosted}
+                    clearDownHosted={clearDownHosted}
+
                 />
             </Show>
 
@@ -500,6 +532,8 @@ export const ResourcesView: Component = () => {
                         clearSecular={clearSecular}
                         clearResourceTypes={clearResourceTypes}
                         filterPostsByResourceTypes={filterPostsByResourceTypes}
+                        downHostedFilter={filterPostsByDownHosted}
+                        clearDownHosted={clearDownHosted}
                     />
                     {/* <div class="sticky top-0 w-3/12">
                         <div class="clear-filters-btns mr-4 flex w-11/12 flex-wrap items-center justify-center rounded border border-border2 dark:border-border2-DM">

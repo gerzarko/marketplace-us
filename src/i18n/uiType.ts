@@ -227,6 +227,8 @@ export interface uiObject {
     no: string;
     more: string;
     secular: string;
+    downHosted: string;
+    downloadable: string;
     resourceLinks: string;
     draft: string;
   };
@@ -461,6 +463,7 @@ export interface uiObject {
 
   clearFilters: {
     filterButtons: [
+      { text: string; ariaLabel: string },
       { text: string; ariaLabel: string },
       { text: string; ariaLabel: string },
       { text: string; ariaLabel: string },

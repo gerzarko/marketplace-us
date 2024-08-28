@@ -99,6 +99,8 @@ interface Props {
     clearAllFilters: () => void;
     secularFilter: (secular: boolean) => void;
     clearSecular: () => void;
+    downHostedFilter: (downHosted: number) => void;
+    clearDownHosted: () => void;
 }
 
 export const FiltersMobile: Component<Props> = (props) => {
@@ -130,7 +132,15 @@ export const FiltersMobile: Component<Props> = (props) => {
     const [showSecular, setShowSecular] = createSignal<boolean>(false);
     const [selectedSecular, setSelectedSecular] = createSignal<boolean>(false);
     const [secularInNumber, setSecularInNumber] = createSignal<number>(0);
+    const [showDownHosted, setShowDownHosted] = createSignal<boolean>(false);
+    // 1 = searchForHostedResoruce, 2 = searchForDownloadableResource
+    const [selectedDownHosted, setSelectedDownHosted] = createSignal<number>(0);
+    const [selectedHostedCheck, setSelectedHostedCheck] =
+        createSignal<boolean>(false);
+    const [selectedDownCheck, setSelectedDownCheck] =
+        createSignal<boolean>(false);
 
+    const [downHostedInNumber, setDownHostedInNumber] = createSignal<number>(0);
     const screenSize = useStore(windowSize);
 
     onMount(() => {
@@ -271,6 +281,8 @@ export const FiltersMobile: Component<Props> = (props) => {
         resourceType().forEach((type) => {
             type.checked = false;
         });
+
+        setSelectedHostedCheck(false);
         setGradeFilters([]);
         setSelectedSubjects([]);
         setResourceTypesFilters([]);
@@ -279,6 +291,7 @@ export const FiltersMobile: Component<Props> = (props) => {
         setResourceTypesFilterCount(0);
         setShowFilterNumber(false);
         setSelectedSecular(false);
+        setSelectedDownHosted(0);
     };
 
     const clearSubjectFiltersMobile = () => {
@@ -314,6 +327,20 @@ export const FiltersMobile: Component<Props> = (props) => {
         setResourceTypesFilters([]);
     };
 
+    const clearDownHostedFilterMobile = () => {
+        setSelectedDownHosted(0);
+        let isCheckHosted = document.getElementsByClassName(
+            "checkBoxHosted"
+        ) as HTMLCollectionOf<HTMLInputElement>;
+        isCheckHosted[0].checked = false;
+        let isCheckDown = document.getElementsByClassName(
+            "checkBoxDown"
+        ) as HTMLCollectionOf<HTMLInputElement>;
+        isCheckDown[0].checked = false;
+        props.downHostedFilter(selectedDownHosted()!);
+        setDownHostedInNumber(0);
+    };
+
     const gradeCheckboxClick = (e: Event) => {
         let currCheckbox = e.currentTarget as HTMLInputElement;
         let currCheckboxID = currCheckbox.id;
@@ -343,6 +370,102 @@ export const FiltersMobile: Component<Props> = (props) => {
         if (selectedSecular() === true) {
             setSecularInNumber(1);
         }
+
+    };
+
+    const downHostedCheckboxClick = (e: Event) => {
+        const isCheck = document.getElementsByClassName(
+            "checkBoxDown"
+        ) as HTMLCollectionOf<HTMLInputElement>;
+        console.log(isCheck[0].checked);
+        if (
+            (e.target as HTMLInputElement)?.checked === true &&
+            isCheck[0].checked === false
+        ) {
+            setSelectedDownHosted(1);
+            console.log("first downhosted");
+            setDownHostedInNumber(1);
+            props.downHostedFilter(selectedDownHosted()!);
+            setSelectedHostedCheck(true);
+            setSelectedDownCheck(false);
+        } else if (
+            (e.target as HTMLInputElement)?.checked === false &&
+            isCheck[0].checked === false
+        ) {
+            console.log("first unchecked");
+            setSelectedDownHosted(0);
+            props.downHostedFilter(selectedDownHosted()!);
+            setDownHostedInNumber(0);
+            setSelectedHostedCheck(false);
+            setSelectedDownCheck(false);
+        } else if (
+            (e.target as HTMLInputElement)?.checked === false &&
+            isCheck[0].checked === true
+        ) {
+            console.log("first unchecked but second checked");
+            setSelectedDownHosted(2);
+            props.downHostedFilter(selectedDownHosted()!);
+            setDownHostedInNumber(1);
+            setSelectedHostedCheck(false);
+            setSelectedDownCheck(true);
+        } else if (
+            (e.target as HTMLInputElement)?.checked === true &&
+            isCheck[0].checked === true
+        ) {
+            console.log("first 4");
+            setSelectedDownHosted(3);
+            props.downHostedFilter(selectedDownHosted()!);
+            setDownHostedInNumber(2);
+            setSelectedHostedCheck(true);
+            setSelectedDownCheck(true);
+        }
+    };
+
+    const downCheckboxClick = (e: Event) => {
+        const isCheck = document.getElementsByClassName(
+            "checkBoxHosted"
+        ) as HTMLCollectionOf<HTMLInputElement>;
+        if (
+            (e.target as HTMLInputElement)?.checked === true &&
+            isCheck[0].checked === false
+        ) {
+            setSelectedDownHosted(2);
+            props.downHostedFilter(selectedDownHosted()!);
+            setDownHostedInNumber(1);
+            setSelectedHostedCheck(false);
+            setSelectedDownCheck(true);
+        }
+        if (
+            (e.target as HTMLInputElement)?.checked === false &&
+            isCheck[0].checked === false
+        ) {
+            setSelectedDownHosted(0);
+            props.downHostedFilter(selectedDownHosted()!);
+            setDownHostedInNumber(0);
+            setSelectedHostedCheck(false);
+            setSelectedDownCheck(false);
+        }
+        if (
+            (e.target as HTMLInputElement)?.checked === false &&
+            isCheck[0].checked === true
+        ) {
+            setSelectedDownHosted(1);
+            setSelectedHostedCheck(true);
+            setSelectedDownCheck(false);
+            props.downHostedFilter(selectedDownHosted()!);
+            setDownHostedInNumber(1);
+        }
+        if (
+            (e.target as HTMLInputElement)?.checked === true &&
+            isCheck[0].checked === true
+        ) {
+            setSelectedDownHosted(3);
+            props.downHostedFilter(selectedDownHosted()!);
+            setDownHostedInNumber(2);
+            setSelectedHostedCheck(true);
+            setSelectedDownCheck(true);
+        }
+
     };
 
     function setSubjectFilter(id: string) {
@@ -379,12 +502,18 @@ export const FiltersMobile: Component<Props> = (props) => {
                             showGrades() === true ||
                             showSubjects() === true ||
                             showSecular() === true ||
-                            showResourceTypes() === true
+                            showResourceTypes() === true ||
+                            showDownHosted() === true
+
                         ) {
                             setShowGrades(false);
                             setShowSubjects(false);
                             setShowFilters(false);
                             setShowResourceTypes(false);
+
+                            setShowSecular(false);
+                            setShowDownHosted(false);
+
                         } else if (showFilters() === true) {
                             setShowFilters(false);
                         } else {
@@ -409,7 +538,11 @@ export const FiltersMobile: Component<Props> = (props) => {
                                     {gradeFilterCount() +
                                         subjectFilterCount() +
                                         resourceTypesFilterCount() +
+                                        secularInNumber() +
+                                        downHostedInNumber()}
+
                                         secularInNumber()}
+
                                 </p>
                             </div>
                         </Show>
@@ -588,6 +721,54 @@ export const FiltersMobile: Component<Props> = (props) => {
                                     <div class="flex h-5 w-5 items-center justify-center rounded-full bg-btn1 dark:bg-btn1-DM">
                                         <p class="text-[10px] text-ptext2 dark:text-ptext2-DM">
                                             {secularInNumber()}
+                                        </p>
+                                    </div>
+                                </Show>
+                                <svg
+                                    width="30px"
+                                    height="30px"
+                                    viewBox="0 0 24 24"
+                                    role="img"
+                                    aria-labelledby="arrowRightIconTitle"
+                                    stroke="none"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    fill="none"
+                                    color="#000000"
+                                    class="mr-2 stroke-icon1 dark:stroke-icon1-DM"
+                                >
+                                    <path d="M15 18l6-6-6-6" />
+                                    <path
+                                        stroke-linecap="round"
+                                        d="M21 12h-1"
+                                    />
+                                </svg>
+                            </div>
+                        </button>
+
+                        {/* downHostedFilter Outside */}
+                        <button
+                            class="w-full"
+                            onClick={() => {
+                                setShowFilters(false);
+                                setShowDownHosted(!showDownHosted());
+                            }}
+                        >
+                            <div class="flex items-center justify-between border-b border-border1 dark:border-border1-DM">
+                                <h2 class="mx-2 my-4 flex flex-1 text-xl text-ptext1 dark:text-ptext1-DM">
+                                    {t("formLabels.downHosted")}
+                                </h2>
+
+                                <Show
+                                    when={
+                                        downHostedInNumber() > 0 &&
+                                        selectedDownHosted() > 0
+                                    }
+                                >
+                                    <div class="flex h-5 w-5 items-center justify-center rounded-full bg-btn1 dark:bg-btn1-DM">
+                                        <p class="text-[10px] text-ptext2 dark:text-ptext2-DM">
+                                            {downHostedInNumber()}
                                         </p>
                                     </div>
                                 </Show>
@@ -860,6 +1041,90 @@ export const FiltersMobile: Component<Props> = (props) => {
                                 onClick={clearSecularFilterMobile}
                             >
                                 {t("clearFilters.filterButtons.6.text")}
+                            </button>
+                        </div>
+                    </div>
+                </Show>
+
+                {/* downHostedFilter */}
+                <Show when={showDownHosted() === true}>
+                    <div class="subjects-pop-out rounded-b border border-border1 bg-background1 shadow-2xl dark:border-border1-DM dark:bg-background1-DM dark:shadow-gray-600">
+                        <button
+                            class="w-full"
+                            onClick={() => {
+                                if (showFilters() === false) {
+                                    setShowDownHosted(false);
+                                    setShowFilters(true);
+                                }
+                            }}
+                        >
+                            <div class="flex items-center border-b border-border1 pb-1 pl-2 dark:border-border1-DM">
+                                <svg
+                                    width="30px"
+                                    height="30px"
+                                    viewBox="0 0 24 24"
+                                    role="img"
+                                    aria-labelledby="arrowLeftIconTitle"
+                                    stroke="none"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    fill="none"
+                                    color="#000000"
+                                    class="stroke-icon1 dark:stroke-icon1-DM"
+                                >
+                                    <path d="M9 6l-6 6 6 6" />
+                                    <path stroke-linecap="round" d="M3 12h1" />
+                                </svg>
+                                <h2 class="flex flex-1 py-2 text-xl font-bold text-ptext1 dark:text-ptext1-DM">
+                                    {t("formLabels.downHosted")}
+                                </h2>
+                            </div>
+                        </button>
+
+                        <div>
+                            <div class="flex flex-row pl-2">
+                                <div class="flex flex-wrap justify-between">
+                                    <div class="w-4/5 px-2 ">
+                                        {t("formLabels.downHosted")}
+                                    </div>
+                                </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        class={`checkBoxHosted mr-2 leading-tight`}
+                                        checked={selectedHostedCheck()}
+                                        onClick={(e) => {
+                                            downHostedCheckboxClick(e);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div class="flex flex-row pl-2">
+                                <div class="flex flex-wrap justify-between">
+                                    <div class="w-4/5 px-2 ">
+                                        {t("formLabels.downloadable")}
+                                    </div>
+                                </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        class={`checkBoxDown mr-2 leading-tight`}
+                                        checked={selectedDownCheck()}
+                                        onClick={(e) => {
+                                            downCheckboxClick(e);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <button
+                                class="w-32 rounded border border-border1 py-1 font-light dark:border-border1-DM"
+                                onClick={clearDownHostedFilterMobile}
+                                // onClick={clearSubjectFiltersMobile}
+                            >
+                                {t("clearFilters.filterButtons.8.text")}
                             </button>
                         </div>
                     </div>
