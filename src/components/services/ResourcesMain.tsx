@@ -19,6 +19,7 @@ import { useStore } from "@nanostores/solid";
 import { windowSize } from "@components/common/WindowSizeStore";
 import useLocalStorage from "@lib/LocalStorageHook";
 import { IconX } from "@tabler/icons-solidjs";
+import { fetchStripe } from "@components/posts/fetchStripe";
 
 const lang = getLangFromUrl(new URL(window.location.href));
 const t = useTranslations(lang);
@@ -352,6 +353,8 @@ export const ResourcesView: Component = () => {
         setSecularFilters(false);
         filterPosts();
     };
+
+    fetchStripe();
 
     return (
         <div class="">
