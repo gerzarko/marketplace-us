@@ -108,6 +108,7 @@ export const French = {
     filters: "Filtres",
     faq: "Centre d'Aide",
     addToCart: "Ajouter au panier",
+    addAllToCart: "Ajouter au panier",
     stripeSetup: "Configuration de Stripe",
     stripeLogin: "Connexion à Stripe",
     proceedToCheckout: "Passer à la caisse",
@@ -185,8 +186,8 @@ export const French = {
       "Aucun article ne correspond à cette recherche spécifique - veuillez essayer un autre filtre ou un autre mot clé",
     noStripeAccount:
       "Vous devez terminer votre inscription auprès de Stripe avant de publier des ressources.",
-      noUser: "Utilisateur non trouvé",
-      selectSubject: "Veuillez sélectionner au moins un sujet",
+    noUser: "Utilisateur non trouvé",
+    selectSubject: "Veuillez sélectionner au moins un sujet",
     emailNotProvided: "Email non fourni",
     comingSoon: "À venir!",
     report: "Signaler cette ressource à LearnGrove",
@@ -672,7 +673,7 @@ export const French = {
       { id: 102, name: 'Prévention et Sécurité Incendie', description: 'Prévention et Sécurité Incendie', ariaLabel: 'Prévention et Sécurité Incendie', subject_id: 8 },
       { id: 103, name: 'Santé', description: 'Santé', ariaLabel: 'Santé', subject_id: 6 },
       { id: 104, name: 'Patriotisme et Citoyenneté', description: 'Patriotisme et Citoyenneté', ariaLabel: 'Patriotisme et Citoyenneté', subject_id: 7 },
-            // Add more subtopics as needed
+      // Add more subtopics as needed
     ],
   },
 

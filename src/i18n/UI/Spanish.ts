@@ -112,6 +112,7 @@ export const Spanish = {
     filters: "Filtros",
     faq: "Centro de Ayuda",
     addToCart: "añadir a la cesta",
+    AddAllToCart: "añadir todoos a la cesta",
     stripeSetup: "Configuración de Stripe",
     stripeLogin: "Iniciar sesión Stripe",
     proceedToCheckout: "Pasar por la caja",
